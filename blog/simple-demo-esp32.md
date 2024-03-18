@@ -117,6 +117,8 @@ end
 
 ## SmAuto Running
 
+![](./images/smauto_run.png)
+
 # ESP32 Hardware Setup
 
 ## Hardware Used:
