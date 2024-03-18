@@ -1,42 +1,60 @@
-Skip to main content
-SmAuto Getting Start with ESP32
-Description
-SmAuto Config & Setup
-ESP32 Hardware Setup
-[[]]
-TODO[[]]
+Title: SmAuto Getting Start with ESP32
+
+Author: GohCY
+
+Date: 18/03/2024
+
+---
+
 # Introduction
+
 We're harnessing the power of SmAuto and the versatile ESP32 microcontroller, and a simple DHT11 sensor to build our very own temperature-controlled air conditioner (using an LED as a stand-in).  No complex wiring or coding experience needed - let's dive in!
+
 # SmAuto Config & Setup
+
 ## Installation
+
 ```
 git clone https://github.com/robotics-4-all/smauto-dsl
 cd smauto-dsl
 pip install .
 ```
+
 ## Local Setup
+
 To run SmAuto locally make sure install `commlib-py` & `mosquitto MQTT  broker`
+
 ### Install Commlib-py
+
 ```
 python -m venv myvenv
 source myenv/bin/activate
 pip install commlib-py
 ```
+
 ```
 sudo apt update -y && sudo apt install mosquitto mosquitto-clients -y
 ```
+
 ### MQTT Config
+
 Broker is working and your MQTT network is ready. In order to allow external device connect to the broker you need update the Mosquitto configuration file
+
 ```
 sudo nano /etc/mosquitto/conf.d/default.conf
 ```
+
 In the `/etc/mosquitto/conf.d/default.conf` file. Add the following line
+
 ```
 allow_anonymous true
 listener 1883
 ```
+
 ## Create SmAuto Model
+
 Create `model.auto` file and add the code below
+
 ```
 Metadata
     name: SimpleHomeAutomation
@@ -81,38 +99,54 @@ Automation start_aircondition
         - aircondition.power:  true
 end
 ```
+
 - Check the model by running `smauto validate model.auto ` is no error you will see screen print `[*] Model validation success!!`
 - After that generate the python code by running `smauto gen model.auto`.
 - Then a new python file `SimpleHomeAutomation.py` will be created or generated.
 - To start the SmAuto run the python file `python SimpleHomeAutomation.py`
 - If there is any issue or error running the python script make sure your `commlib-py` and `mosquito` broker is installed and config properly. Refer local setup.
+
 ## SmAuto Model Discussion
+
 - Entity Definitions:
     - "dht11_sensor" (sensor) to receive data from the Arduino.
     - "aircondition" (actuator) to control the simulated air conditioner (LED).
 - Automation:
     - Condition: Checks if the temperature exceeds 32°C and if the aircondition is currently off.
     - Action: Sets the "power" attribute of the "aircondition" to 'true'.
+
 ## SmAuto Running
+
 # ESP32 Hardware Setup
+
 ## Hardware Used:
 - FireBeetle 2 ESP32-E IoT Microcontroller
 - LED
 - DHT11 Sensor
+
 ## Circuit Schemetic Diagram
+
 ![](./images/getting_start_schemetic.jpg)
+
 ![](./images/getting_start_hardware.png)
+
 ## Arduino Code
+
 ### Boards Setup
-Goes to `files` -> in `preferences`
-Under `Additional boards manager URLs` add
-`https://espressif.github.io/arduino-esp32/package_esp32_index.json`
-Navigate to `Board Manger`
-Install package `esp32` by Espressif System
+
+- Goes to `files` -> in `preferences`
+    - Under `Additional boards manager URLs` add
+    - `https://espressif.github.io/arduino-esp32/package_esp32_index.json`
+- Navigate to `Board Manger`
+    - Install package `esp32` by Espressif System
+
 ### Library Used
+
 For MQTT client library we used `PubSubClient` by Nick O'Leary
 https://pubsubclient.knolleary.net/
+
 ### Code
+
 ```c
 #include <WiFi.h>
 #include <PubSubClient.h>
